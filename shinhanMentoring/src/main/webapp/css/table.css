@@ -1,0 +1,20 @@
+#inputtable{
+	margin-top:20px; 
+	height:auto;
+}
+
+#inputtable  td{
+	width:2000px; 
+	height:50px; 
+	font-size:20px; 
+	background-color:#D8D8D8;
+}
+
+#infotablepre{
+	float:left; 
+	width:120px
+}
+#infotablepost{
+	float:left; 
+	width:330px
+}

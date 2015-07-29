@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="univ.common.mybatis.MemberMapper">
+
+	<resultMap type="Member" id="MemberResultMap">
+		<result property="USER_ID" column="USER_ID" />
+		<result property="USER_PASSWORD" column="USER_PASSWORD" />
+		<result property="USER_NAME" column="USER_NAME" />
+		<result property="USER_PHONE" column="USER_PHONE" />
+		<result property="USER_EMAIL" column="USER_EMAIL" />
+		<result property="USER_EMAIL_DOMAIN" column="USER_EMAIL_DOMAIN" />
+		<result property="USER_JOB" column="USER_JOB" />
+	</resultMap>
+	
+	<resultMap type="Project" id="ProjectResultMap">
+		<result property="PRO_ID" column="PRO_ID" />
+		<result property="PRO_MENTOR" column="PRO_MENTOR" />
+		<result property="PRO_SUBJECT" column="PRO_SUBJECT" />
+		<result property="PRO_CATEGORY" column="PRO_CATEGORY" />
+		<result property="PRO_CONTENT" column="PRO_CONTENT" />
+		<result property="PRO_EFFECT" column="PRO_EFFECT" />
+		<result property="PRO_START_DATE" column="PRO_START_DATE" />
+		<result property="PRO_END_DATE" column="PRO_END_DATE" />
+	</resultMap>
+	
+	<resultMap type="projectBoard" id="projectBoardResultMap">
+		<result property="PRO_BOARD_ID" column="PRO_BOARD_ID"/>
+		<result property="PRO_ID" column="PRO_ID" />
+		<result property="USER_ID" column="USER_ID" />
+		<result property="PRO_SUBJECT" column="PRO_SUBJECT" />
+		<result property="PRO_CONTENT" column="PRO_CONTENT" />
+		<result property="PRO_DATE" column="PRO_DATE" />
+		<result property="PRO_FILE" column="PRO_FILE" />
+	</resultMap>
+	
+	
+	<select id="projectCount" resultType="java.lang.Integer" >
+	select count(*) from PROJECT
+	</select>
+	<!-- id의 경우에는 Mapper.java에 동일하게 사용해야된다. -->
+	<select id="getMembers" resultMap="MemberResultMap">
+		SELECT * FROM USER
+	</select>
+	
+	<select id="idcheck" resultType="java.lang.Integer"  parameterType="univ.common.mybatis.Member">
+		select count(USER_ID) from USER where USER_ID=#{USER_ID}
+	</select>
+	
+	<select id="loginCheck" resultType="java.lang.Integer"  parameterType="univ.common.mybatis.Member">
+		select count(USER_ID) from USER where USER_ID=#{USER_ID} and USER_PASSWORD=#{USER_PASSWORD}
+	</select>
+	
+	<!-- 프로젝트 트랙 목록 뿌리는부분 -->
+	<select id="projectTrack" resultMap="ProjectResultMap"  parameterType="univ.common.mybatis.Project">
+		select a.* from (
+			SELECT
+			    @ROWNUM := @ROWNUM + 1 AS ROWNUM,
+			    PROJECT.* 
+			FROM
+			    PROJECT,
+			    (SELECT @ROWNUM := 0) R
+			    order by PRO_ID desc	 
+			    )a
+		where a.ROWNUM between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 프로젝트 디테일 -->
+	<select id="projectDetail" resultMap="ProjectResultMap"  parameterType="java.lang.Integer">
+		select * from PROJECT where PRO_ID=#{id}
+	</select>
+	<!-- parameterType 에는 구문에 전달될 파라미터의 패키지 경로를 포함한 전체 클래명이나 별칭이 들어간다  -->
+	<insert id="insertMember" parameterType="univ.common.mybatis.Member" >
+	 	INSERT INTO USER values(#{USER_ID},#{USER_PASSWORD},#{USER_NAME},#{USER_PHONE},#{USER_EMAIL},#{USER_EMAIL_DOMAIN},#{USER_JOB})
+	</insert>
+	
+	
+	<!-- insert project -->
+	<insert id="insertProject" parameterType="univ.common.mybatis.Project">
+		INSERT INTO PROJECT(PRO_MENTOR,PRO_SUBJECT,PRO_CATEGORY,PRO_CONTENT,PRO_EFFECT,PRO_START_DATE,PRO_END_DATE) values(#{PRO_MENTOR},#{PRO_SUBJECT},#{PRO_CATEGORY},#{PRO_CONTENT},#{PRO_EFFECT},#{PRO_START_DATE},#{PRO_END_DATE}) 
+	</insert>
+	
+	<!-- insert project -->
+	<insert id="insertProjectMentor" parameterType="univ.common.mybatis.Member">
+		INSERT INTO PROJECT_JOIN_LIST VALUES(#{USER_ID},#{PRO_ID})
+	</insert>
+	
+	<!-- selectNewProject -->
+	<select id="selectNewProject"  resultMap="ProjectResultMap" parameterType="univ.common.mybatis.Project">
+			select pro_id  from project where PRO_MENTOR=#{PRO_MENTOR} order by pro_id desc limit 1
+	</select>
+	<!-- update는 생략한다. -->
+	<update id=""></update>
+	
+	<!-- projectAssign -->
+	<insert id="projectAssign" parameterType="univ.common.mybatis.Member">
+				INSERT INTO PROJECT_ASSIGN_LIST values(#{PRO_ID},#{USER_ID});
+	</insert>
+	<delete id="deleteMember" parameterType="univ.common.mybatis.Member">
+	</delete>
+
+	<!-- project JOIN LIST -->
+	<select id="projectJoinList" resultMap="ProjectResultMap"  parameterType="java.lang.String">
+			select * from project_join_list,project where project_join_list.PRO_ID=project.PRO_ID and USER_ID=#{id}
+	</select>
+	
+	<!-- project board List -->
+	<select id="projectBoardList" resultMap="projectBoardResultMap"  parameterType="java.lang.Integer">
+		select * from project_board where pro_id=#{id}
+	</select>
+
+</mapper>

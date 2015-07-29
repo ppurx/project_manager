@@ -1,0 +1,38 @@
+<footer>
+			<div class="wrapper">
+			
+				<ul id="footer-cols">
+					
+					<li class="first-col">						
+						<div class="widget-block">
+							<h4>Recent Project</h4>
+							
+						</div>
+					</li>
+					
+					<li class="second-col">
+						
+						<div class="widget-block">
+							<h4>Contact</h4>
+							
+						</div>
+						
+					</li>
+					
+					<li class="third-col">
+						
+						<div class="widget-block">
+							<div id="tweets" class="footer-col tweet">
+		         				<h4>Producted By</h4>
+		         			</div>
+		         		</div>
+		         		
+					</li>	
+				</ul>				
+				<div class="clearfix"></div>
+				
+				
+			</div>
+			
+			<div id="to-top"></div>
+		</footer>

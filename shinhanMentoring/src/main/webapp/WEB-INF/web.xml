@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- //서버 실행시 불러올 파일들 // -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+	
+	<!-- ContextLoaderListener와 DispatcherServlet은 각각 WebApplicationContext 인스턴스를 생성하게 된다.-->
+
+    <!--  ContextLoaderListener가 생성한 Context가 root가 되고 DispatcherServlet 이 생성한 인스턴스가 root context를
+
+          부모로 사용하는 자식 Context가 된다.
+
+          이때 자식 Context들은 root Context가 제공하는 빈을 사용할 수 있기 때문에  ContextLoaderListener를 이용하여
+
+          공통 빈을 설정하는 것이다. -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- url요청이 발생하면 DispatcherServlet이 처리하도록 설정 // Processes application requests -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value> 	<!-- 설정 파일이 있는 경로 -->
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>	<!-- /로 설정함으로서 /이하 모든 url을 매핑시키겠단 뜻. -->
+	</servlet-mapping>
+
+
+	<!-- filter -->
+	<filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>
+            org.springframework.web.filter.CharacterEncodingFilter     <!-- 스크링의 인코딩 클래스 -->
+        </filter-class>
+        <init-param>
+            <param-name>encoding</param-name>    <!-- 파라미터 설정 encoding을 UTF-8로 설정하겠단 뜻 -->
+            <param-value>UTF-8</param-value>
+        </init-param>
+        
+    </filter>    
+    
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>                   <!-- 이하 모든 URL에 이 인코딩 필터를 적용하겠단 뜻 -->
+    </filter-mapping>
+    <!-- 첫페이지 -->
+    <welcome-file-list>
+    	<welcome-file>index.jsp</welcome-file>
+  	</welcome-file-list>
+  	
+  
+    
+</web-app>
