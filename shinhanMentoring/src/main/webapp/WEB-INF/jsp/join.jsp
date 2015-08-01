@@ -45,9 +45,7 @@
 						</select>
 						</td>
 					</tr>
-					<tr>
-						<td>학과</td><td><input name="department"  id="department" type="text" class="form-poshytip" title="학부생인경우 **학부 / **전공 으로 입력하시오" /></td>
-					</tr>	
+						
 					<tr>
 						<td>학번</td><td colspan="2"><input name="id"  id="id" type="text"/>&nbsp&nbsp<span id="idmessage">학번이 없는경우 임의의 ID로 가입할 수 있습니다.</span></td>
 					</tr>	
@@ -120,7 +118,6 @@
 		$('#submitbtn').click(function(){
 			if($("#job").val()==0)alert("직업을 선택하시오.");
 			else if($("#name").val()=="") alert("이름을 입력하시오.");
-			else if($("#department").val()=="")alert("학과를 입력하시오.");
 			else if($("#id").val()=="")alert("학번을 입력하시오.");
 			else if($("#phone1").val()==""||$("#phone2").val()==""||$("#phone3").val()=="") alert("연락처를 입력하시오.");
 			

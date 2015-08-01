@@ -1,10 +1,18 @@
 package univ.shinhan.mentoring;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,6 +25,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import univ.common.mybatis.Member;
 import univ.common.mybatis.MemberDAOService;
@@ -262,10 +273,12 @@ public class MybatisController {
 			member.setUSER_ID((String)session.getAttribute("USER_ID"));
 			member.setPRO_ID((String)request.getParameter("PRO_ID"));
 				
+			System.out.println(member.getUSER_ID());
 			try{
 				memberDAOService.projectAssign(member);
 			}
 			catch(Exception e){
+				System.out.println(e);
 					check=0;//false;
 			}
 			
@@ -304,7 +317,8 @@ public class MybatisController {
 				projectBoardList.get(i).setPRO_DATE((projectBoardList.get(i).getPRO_DATE().substring(0, 10)));
 			}
 			
-			
+			List<Member> list = memberDAOService.selectJoinMember(PRO_ID);
+			mav.addObject("list",list);
 			mav.addObject("projectBoardList",projectBoardList);
 			
 			
@@ -313,5 +327,105 @@ public class MybatisController {
 			return mav;                          
 		}
 		
+		@RequestMapping(value = "assignList", method = RequestMethod.GET)  
+		public ModelAndView assignList(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {          
+			request.setCharacterEncoding("utf-8");
+			ModelAndView mav = new ModelAndView();
+			int PRO_ID=Integer.parseInt(request.getParameter("PRO_ID"));
+			String PRO_SUBJECT = new String(request.getParameter("PRO_SUBJECT").getBytes("ISO-8859-1"), "UTF-8");
+			List<Member> member = memberDAOService.userAssignList(PRO_ID);
+			
+			mav.addObject("userAssignList",member);
+			mav.addObject("PRO_SUBJECT",PRO_SUBJECT);
+			System.out.println(PRO_ID);
+			mav.addObject("PRO_ID",PRO_ID);
+			mav.setViewName("assignList");
+			return mav;                          
+		}
 		
+		@RequestMapping(value = "approve", method = RequestMethod.GET)  
+		public String approve(HttpServletRequest request, HttpServletResponse response) {  
+			Member member = new Member();
+			member.setUSER_ID(request.getParameter("USER_ID"));
+			member.setPRO_ID(request.getParameter("PRO_ID"));
+			
+			
+			memberDAOService.addJoinList(member);
+			memberDAOService.delAssignList(member);
+		    return "forward:/mypage.do";       
+		}
+		
+		@RequestMapping(value = "infoModify", method = RequestMethod.GET)  
+		public ModelAndView infoModify(HttpServletRequest request, HttpServletResponse response) {  
+			ModelAndView mav = new ModelAndView();
+			
+			String USER_ID = (String)request.getParameter("USER_ID");
+			
+			Member member = memberDAOService.selectInfo(USER_ID);
+			
+			mav.addObject("member",member);
+			mav.setViewName("infoModify");
+		    return mav;       
+		}
+		
+		
+		@RequestMapping(value = "infoModifyOK", method = RequestMethod.GET)  
+		public String infoModifyOK(HttpServletRequest request, HttpServletResponse response) {  
+			
+			HttpSession session = request.getSession();
+			String USER_ID = (String) session.getAttribute("USER_ID");
+			Member member = new Member();
+			member.setUSER_NAME((String)request.getParameter("name"));
+			member.setUSER_PHONE((String)request.getParameter("phone"));
+			member.setUSER_ID(USER_ID);
+			member.setUSER_EMAIL((String)request.getParameter("email"));
+			member.setUSER_EMAIL_DOMAIN((String)request.getParameter("emailDomain"));
+			member.setUSER_PASSWORD((String)request.getParameter("password"));
+			
+			
+			memberDAOService.updateInfo(member);
+			 return "forward:/mypage.do";      
+		}
+		@RequestMapping(value = "writeProjectBoard", method = RequestMethod.GET)  
+		public ModelAndView writeProjectBoard(HttpServletRequest request, HttpServletResponse response) {          
+			ModelAndView mav = new ModelAndView();
+			mav.addObject("PRO_ID",request.getParameter("PRO_ID"));
+			mav.setViewName("writeProjectBoard");
+			return mav;
+		}
+		
+		@RequestMapping(value = "projectBoardWrite", method = RequestMethod.POST)  
+		public ModelAndView projectBoardWrite(HttpServletRequest request, HttpServletResponse response) throws IOException {          
+		
+			ModelAndView mav = new ModelAndView();
+			int maxPostSize = 10 * 1024 * 1024; // 10MB
+		     String saveDirectory = request.getSession().getServletContext().getRealPath("/upload");
+		     MultipartRequest multi = new MultipartRequest(request, saveDirectory, maxPostSize, "utf-8");
+		 
+		     Enumeration formNames=multi.getFileNames();  // 폼의 이름 반환
+		 
+		     String fileInput = "";
+		     String fileName = "";
+		     String type = "";
+		     File fileObj = null;
+		     String originFileName = "";    
+		     String fileExtend = "";
+		     String fileSize = "";
+		 
+		     while(formNames.hasMoreElements()) {
+		          fileInput = (String)formNames.nextElement();                // 파일인풋 이름
+		          fileName = multi.getFilesystemName(fileInput);            // 파일명
+		          if (fileName != null) {
+		               type = multi.getContentType(fileInput);                   //콘텐트타입    
+		               fileObj = multi.getFile(fileInput);                             //파일객체
+		               originFileName = multi.getOriginalFileName(fileInput);           //초기 파일명
+		               fileExtend = fileName.substring(fileName.lastIndexOf(".")+1); //파일 확장자
+		               fileSize = String.valueOf(fileObj.length());                    // 파일크기
+		               
+		               System.out.println(saveDirectory+"\\"+originFileName);
+		          }
+		     }
+       
+		return mav;
+		}
 }

@@ -136,4 +136,56 @@ public class MemberDAOService implements MemberDAO {
 		ArrayList<ProjectBoard> result = memberMapper.projectBoardList(PRO_ID);
 		return result;
 	}
+
+
+	@Override
+	public ArrayList<Member> userAssignList(int PRO_ID) {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		ArrayList<Member> result = memberMapper.userAssignList(PRO_ID);
+		return result;
+	}
+
+
+	@Override
+	public void addJoinList(Member member) {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		memberMapper.addJoinList(member);
+	}
+
+
+	@Override
+	public void delAssignList(Member member) {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		memberMapper.delAssignList(member);
+	}
+
+
+	@Override
+	public ArrayList<Member> selectJoinMember(int PRO_ID) {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		ArrayList<Member> member = memberMapper.selectJoinMember(PRO_ID);
+		return member;
+	}
+
+
+	@Override
+	public Member selectInfo(String USER_ID) {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		Member member = memberMapper.selectInfo(USER_ID);
+		
+		return member;
+	}
+
+
+	@Override
+	public void updateInfo(Member member) {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		memberMapper.updateInfo(member);
+	}
 }

@@ -25,10 +25,10 @@
 			<h2>가입을 환영합니다.</h2>
 				<div style="margin-top:60px;margin-left:50px">
 					<label>학번</label>
-					<input style="margin-left:20px" name="name"  id="name" type="text" />
+					<input style="margin-left:20px" name="id"  id="id" type="text" />
 					
 					<label style="margin-left:50px">Password</label>
-					<input style="margin-left:20px" name="email"  id="email" type="text" class="form-poshytip" title="비밀번호를 잊으셨으면 아래의 버튼을 눌러주세요" />
+					<input style="margin-left:20px" name="password"  id="password" type="text" class="form-poshytip" title="비밀번호를 잊으셨으면 아래의 버튼을 눌러주세요" />
 					<br>
 					<div style="margin-left:350px">
 					<input type="submit" value="login"/>&nbsp&nbsp<input type="button" value="cancle"/>&nbsp&nbsp<input type="button" value="join"/>&nbsp&nbsp<input type="button" value="find Password"/>

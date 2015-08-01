@@ -53,8 +53,8 @@
 	        		<div class="block">
 		        		<h4>My menu</h4>
 						<ul>
-							<li class="cat-item"><a href="#" title="View all posts">내 정보 수정</a></li>
-							<li class="cat-item"><a href="#" title="View all posts">탈퇴</a></li>
+							<li class="cat-item"><a href="infoModify.do?USER_ID=${sessionScope.USER_ID }" title="View all posts">내 정보 수정</a></li>
+							
 							
 						</ul>
 	        		</div>        		

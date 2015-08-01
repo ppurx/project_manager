@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -10,10 +10,9 @@
 
  <jsp:include page="../include/header.jsp"/>
 	<div id="content">
-	
 		<!-- masthead -->
         <div id="masthead">
-			<span class="head">classmate</span>
+			<span class="head">${project.PRO_SUBJECT }</span>
 			<ul class="breadcrumbs">
 				<li><a href="index.jsp">home</a></li>
 				<li>/ projectBoard</li>
@@ -21,11 +20,11 @@
 		</div>
 		
 		<!-- posts list -->
-		<!-- «¡∑Œ¡ß∆Æ ∞≥ø‰ -->
+		<!--   ÌîÑÎ°úÏ†ùÌä∏ Í∞úÏöî   -->
 	        	<div id="posts-list">
 	        	<div style="margin-top:20px;margin-left:20px;">
 	        				
-						<h1>«¡∑Œ¡ß∆Æ ∞≥ø‰</h1>
+						<h1>ÌîÑÎ°úÏ†ùÌä∏ Í∞úÏöî</h1>
 						<br>
 					<div style="margin-left:10px">
 							<table style="font-size:15px; font-color:#000000;">
@@ -34,38 +33,43 @@
 							    <col width="350px"/>
 							 </colgroup>
 								<tr>
-									<td>«¡∑Œ¡ß∆Æ∏Ì</td><td>${project.PRO_SUBJECT }</td>
+									<td>ÌîÑÎ°úÏ†ùÌä∏Î™Ö</td><td>${project.PRO_SUBJECT }</td>
 								</tr>
 								<tr>
-									<td>∫–∑˘</td><td>${project.PRO_CATEGORY }</td>
+									<td>Î∂ÑÎ•ò</td><td>${project.PRO_CATEGORY }</td>
 								</tr>
 								<tr>
-									<td>ºˆ«‡±‚∞£</td><td>${project.PRO_START_DATE } ~ ${project.PRO_END_DATE }</td>
+									<td>ÏàòÌñâÍ∏∞Í∞Ñ</td><td>${project.PRO_START_DATE } ~ ${project.PRO_END_DATE }</td>
 								</tr>
 								<tr>
-									<td>¡÷ø‰≥ªøÎ</td><td>${project.PRO_CONTENT }</td>
+									<td>Ï£ºÏöîÎÇ¥Ïö©</td><td>${project.PRO_CONTENT }</td>
 								</tr>
 								<tr>
-									<td>±‚¥Î»ø∞˙</td><td>${project.PRO_EFFECT }</td>
+									<td>Í∏∞ÎåÄÌö®Í≥º</td><td>${project.PRO_EFFECT }</td>
 								</tr>
 								<tr>
-									<td>ªÛ≈¬</td><td>¡¯«‡</td>
+									<td>ÏÉÅÌÉú</td><td>ÏßÑÌñâ</td>
 								</tr>
+								<c:if test="${project.PRO_MENTOR==sessionScope.USER_ID }">
+								<tr>								
+									<td><br><input type="button" onclick="window.location='assignList.do?PRO_ID=${project.PRO_ID}&PRO_SUBJECT=${project.PRO_SUBJECT }'" value="Í∞ÄÏûÖÏã†Ï≤≠ ÌòÑÌô©"/></td>
+								</tr>
+								</c:if>
 							</table>
 					</div>
 					
 					
 	        	</div>
-	        	<!--ENDS «¡∑Œ¡ß∆Æ ∞≥ø‰ -->
-	        	<!-- «¡∑Œ¡ß∆Æ ∞‘Ω√∆«-->
+	        	<!--ENDS ÌîÑÎ°úÏ†ùÌä∏ Í∞úÏöî -->
+	        	<!-- ÌîÑÎ°úÏ†ùÌä∏ Í≤åÏãúÌåê-->
 	        	<br>
 	        	<br>
 	        	
 	        	<div style="margin-top:20px;margin-left:20px;">
-	        	<h1>«¡∑Œ¡ß∆Æ ¡¯«‡ ∞‘Ω√∆«</h1>
+	        	<h1>ÌîÑÎ°úÏ†ùÌä∏ ÏßÑÌñâ Í≤åÏãúÌåê</h1>
 		        	<div style="margin-left:10px">
 		        	<br>
-		        	<input style="float:right" type="button" value="±€ ¿€º∫"/>
+		        	<input style="float:right" type="button" onclick="window.location='writeProjectBoard.do?PRO_ID=${project.PRO_ID}'" value="Í∏Ä ÏûëÏÑ±"/>
 		        	<br>
 		        	<br>
 		        	
@@ -78,9 +82,9 @@
 							 </colgroup>
 			        		<thead>
 			        			
-			        			<th>¡¶∏Ò</th>
-			        			<th>¿€º∫¿⁄</th>
-			        			<th>¿€º∫¿œ</th>			        			
+			        			<th>Ï†úÎ™©</th>
+			        			<th>ÏûëÏÑ±Ïûê</th>
+			        			<th>ÏûëÏÑ±Ïùº</th>			        			
 			        		</thead>
 			        		<tbody align="center">
 			        			<c:forEach var="projectBoardList" items="${projectBoardList }">
@@ -106,50 +110,31 @@
 	        	
 	        	
 	        	
-	        	<!-- ends «¡∑Œ¡ß∆Æ ∞‘Ω√∆«-->
+	        	<!-- ends ÌîÑÎ°úÏ†ùÌä∏ Í≤åÏãúÌåê-->
 		
 	        	
 	        <div class="wrapper">
 	        	<!-- sidebar -->
 	        	<aside id="sidebar">
+	        		<c:forEach var="list" items="${list }">
+	        		<div class="block">
+		        		<h4>${list.USER_NAME }</h4>
+						<ul class="address-block">
+						<c:choose>
+						<c:when test="${project.PRO_MENTOR==list.USER_ID}">
+							<li class="mento">${list.USER_NAME }</li>
+						</c:when>
+						<c:when test="${project.PRO_MENTOR!=list.USER_ID}">
+							<li class="menti">${list.USER_NAME }</li>
+						</c:when>
+						</c:choose>
+							
+							<li class="mobile">${list.USER_PHONE }</li>
+		        			<li class="email">${list.USER_EMAIL }@${list.USER_EMAIL_DOMAIN }</a></li>					
+						</ul>
+	        		</div>
 	        		
-	        		<div class="block">
-		        		<h4>±ËªÛ«ˆ</h4>
-						<ul class="address-block">
-							<li class="mento">∏‡≈‰</li>
-							<li class="auth">∆¿¿Â</li>	
-							<li class="mobile">+123 456 789</li>
-		        			<li class="email"><a href="mailto:email@server.com">email@server.com</a></li>					
-						</ul>
-	        		</div>
-	        		<div class="block">
-		        		<h4>±Ë¿∫¡ˆ</h4>
-						<ul class="address-block">
-							<li class="menti"><a href="#" title="View all posts">∏‡∆º</a></li>
-							<li class="auth"><a href="#" title="View all posts">∆¿ø¯</a></li>		
-							<li class="mobile">+123 456 789</li>
-		        			<li class="email"><a href="mailto:email@server.com">email@server.com</a></li>				
-						</ul>
-	        		</div>
-	        		<div class="block">
-		        		<h4>±ËªÛ«ˆ</h4>
-						<ul class="address-block">
-							<li class="menti"><a href="#" title="View all posts">∏‡≈‰</a></li>
-							<li class="auth"><a href="#" title="View all posts">∆¿¿Â</a></li>						
-							<li class="mobile">+123 456 789</li>
-		        			<li class="email"><a href="mailto:email@server.com">email@server.com</a></li>
-						</ul>
-	        		</div>
-	        		<div class="block">
-		        		<h4>±ËªÛ«ˆ</h4>
-						<ul class="address-block">
-							<li class="menti"><a href="#" title="View all posts">∏‡≈‰</a></li>
-							<li class="auth"><a href="#" title="View all posts">∆¿¿Â</a></li>			
-							<li class="mobile">+123 456 789</li>
-		        			<li class="email"><a href="mailto:email@server.com">email@server.com</a></li>			
-						</ul>
-	        		</div>        		
-	        	
+	        	</c:forEach>
 	        	</aside>
 		</div>
 		

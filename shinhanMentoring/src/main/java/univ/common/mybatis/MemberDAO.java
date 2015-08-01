@@ -23,4 +23,16 @@ public interface MemberDAO {
 	ArrayList<Project> projectJoinList(String USER_ID);
 	
 	ArrayList<ProjectBoard> projectBoardList(int PRO_ID);
+	
+	ArrayList<Member> userAssignList(int PRO_ID);
+	
+	void addJoinList(Member member);
+	
+	void delAssignList(Member member);
+	
+	ArrayList<Member> selectJoinMember(int PRO_ID);
+	
+	Member selectInfo(String USER_ID);
+	
+	void updateInfo(Member member);
 }

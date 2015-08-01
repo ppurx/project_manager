@@ -39,6 +39,9 @@
 						<td>기대효과</td><td><input type="text" value="${projectDetail.PRO_EFFECT }" readonly name="effect"  id="effect" /></td>
 					</tr>	
 					<tr>
+						<td><a href="C:\Users\sh\Desktop\springWorkspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\shinhanMentoring\upload\test.txt">다운로드</a></td>
+					</tr>
+					<tr>
 						<td>시작일</td><td colspan="2"><input type="text" value="${projectDetail.PRO_START_DATE }" readonly id="startDate" name="startDate"/></td>
 					</tr>	
 					<tr>

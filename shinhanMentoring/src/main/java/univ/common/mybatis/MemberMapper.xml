@@ -96,7 +96,7 @@
 	
 	<!-- projectAssign -->
 	<insert id="projectAssign" parameterType="univ.common.mybatis.Member">
-				INSERT INTO PROJECT_ASSIGN_LIST values(#{PRO_ID},#{USER_ID});
+				INSERT INTO PROJECT_ASSIGN_LIST(PRO_ID,USER_ID,ASSIGN_TEXT) values(#{PRO_ID},#{USER_ID},"test");
 	</insert>
 	<delete id="deleteMember" parameterType="univ.common.mybatis.Member">
 	</delete>
@@ -111,4 +111,28 @@
 		select * from project_board where pro_id=#{id}
 	</select>
 
+	<select id="userAssignList" resultMap="MemberResultMap" parameterType="java.lang.Integer">
+	    select USER.USER_ID,USER.USER_NAME,USER.USER_PHONE,USER.USER_EMAIL,USER.USER_EMAIL_DOMAIN,PROJECT_ASSIGN_LIST.PRO_ID,PROJECT_ASSIGN_LIST.ASSIGN_TEXT from USER,PROJECT_ASSIGN_LIST where USER.USER_ID=PROJECT_ASSIGN_LIST.USER_ID and PROJECT_ASSIGN_LIST.PRO_ID=#{id}
+	</select>
+	
+	<insert id="addJoinList"  parameterType="univ.common.mybatis.Member" >
+	    insert into PROJECT_JOIN_LIST values(#{USER_ID},#{PRO_ID});	    
+	</insert>
+	
+	<delete id="delAssignList"  parameterType="univ.common.mybatis.Member" >
+	    delete from PROJECT_ASSIGN_LIST where user_id=#{USER_ID} and pro_id=#{PRO_ID}
+	</delete>
+	
+	<select id="selectJoinMember" resultMap="MemberResultMap" parameterType="java.lang.Integer">
+	    select USER.USER_ID,USER.USER_NAME,USER.USER_PHONE,USER.USER_EMAIL,USER.USER_EMAIL_DOMAIN,PROJECT_JOIN_LIST.PRO_ID from USER,PROJECT_JOIN_LIST where USER.USER_ID=PROJECT_JOIN_LIST.USER_ID and PRO_ID=#{id}
+	</select>
+	
+	<select id="selectInfo" resultMap="MemberResultMap" parameterType="java.lang.String">
+	    select * from USER where USER_ID=#{id}
+	    
+	</select>
+	
+	<update id="updateInfo" parameterType="univ.common.mybatis.Member">	    
+	    update USER set USER_NAME=#{USER_NAME}, USER_PHONE=#{USER_PHONE}, USER_EMAIL=#{USER_EMAIL},USER_EMAIL_DOMAIN=#{USER_EMAIL_DOMAIN},USER_PASSWORD=#{USER_PASSWORD} where USER_ID=#{USER_ID}
+	</update>
 </mapper>

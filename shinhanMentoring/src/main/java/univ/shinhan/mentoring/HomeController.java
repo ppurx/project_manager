@@ -81,4 +81,8 @@ private static final Logger logger = LoggerFactory.getLogger(HomeController.clas
 	public String projectBoardDetail(Locale locale, Model model) {          
 	    return "projectBoardDetail";                          
 	}
+	
+	
+	
+	
 }
