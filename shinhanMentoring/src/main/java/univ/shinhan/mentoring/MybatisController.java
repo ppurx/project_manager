@@ -31,6 +31,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import univ.common.mybatis.Member;
 import univ.common.mybatis.MemberDAOService;
+import univ.common.mybatis.NoticeBoard;
 import univ.common.mybatis.Project;
 import univ.common.mybatis.ProjectBoard;
 
@@ -194,12 +195,49 @@ public class MybatisController {
 			
 			HttpSession session = request.getSession();
 			session.setAttribute("currentPage", "1");
-			List<Project> projectList = memberDAOService.projectTrack(p);
+			String category=(String)request.getParameter("category");
+			//////////////////////////////////
+			int totalCount = 0;
+			if(category==null){
+				totalCount = memberDAOService.projectCount();
+			}else if(category.equals("WEB PROJECT")){
+				totalCount = memberDAOService.projectCountWEB();
+			}else if(category.equals("IOT PROJECT")){
+				totalCount = memberDAOService.projectCountIOT();
+			}else if(category.equals("WINDOW PROJECT")){
+				totalCount = memberDAOService.projectCountWINDOW();
+			}else if(category.equals("ANDROID PROJECT")){
+				totalCount = memberDAOService.projectCountANDROID();
+			}else if(category.equals("ETC")){
+				totalCount = memberDAOService.projectCountETC();
+			}
+			
+			List<Project> projectList = null;
+			
+			session.setAttribute("category", category);
+			
+			if(category==null){
+				System.out.println("null");
+				projectList = memberDAOService.projectTrack(p);
+			}else if(category.equals("WEB PROJECT")){
+				System.out.println("web");
+				projectList = memberDAOService.projectTrackWEB(p);
+			}else if(category.equals("IOT PROJECT")){
+				projectList = memberDAOService.projectTrackIOT(p);
+			}else if(category.equals("WINDOW PROJECT")){
+				projectList = memberDAOService.projectTrackWINDOW(p);
+			}else if(category.equals("ANDROID PROJECT")){
+				projectList = memberDAOService.projectTrackANDROID(p);
+			}else if(category.equals("ETC")){
+				projectList = memberDAOService.projectTrackETC(p);
+			}
+			
+			//////////////////////////////////
 			
 			project.addObject("projectTrack", projectList);
 			project.setViewName("projectTrack");
 			
-			int totalCount = memberDAOService.projectCount();
+			
 			int totalPageNum;
 			if(totalCount%9==0){
 				totalPageNum=totalCount/9;
@@ -225,7 +263,29 @@ public class MybatisController {
 			//addObject view�� �Ѿ�� ������
 			Project p = new Project();
 			HttpSession session = request.getSession();
-			int totalCount = memberDAOService.projectCount();
+			String category = (String) session.getAttribute("category");
+			int totalCount = 0;
+			
+				if(category==null){
+					totalCount = memberDAOService.projectCount();
+				}else if(category.equals("WEB PROJECT")){
+					totalCount = memberDAOService.projectCountWEB();
+				}else if(category.equals("IOT PROJECT")){
+					totalCount = memberDAOService.projectCountIOT();
+				}else if(category.equals("WINDOW PROJECT")){
+					totalCount = memberDAOService.projectCountWINDOW();
+				}else if(category.equals("ANDROID PROJECT")){
+					totalCount = memberDAOService.projectCountANDROID();
+				}else if(category.equals("ETC")){
+					totalCount = memberDAOService.projectCountETC();
+				}
+			
+			
+			
+			
+			
+			
+			
 			int totalPageNum;
 			if(totalCount%9==0){
 				totalPageNum=totalCount/9;
@@ -238,8 +298,26 @@ public class MybatisController {
 			project.addObject("currentPage", currentPage);
 			p.setStartNum(""+(currentPage*9-8));
 			p.setEndNum(""+(currentPage*9));
-			List<Project> projectList = memberDAOService.projectTrack(p);
+			////////////////////////////////////
+						
+			List<Project> projectList = null;
 			
+			if(category==null){
+			projectList = memberDAOService.projectTrack(p);
+			}else if(category.equals("WEB PROJECT")){
+				System.out.println("web");
+				projectList = memberDAOService.projectTrackWEB(p);
+			}else if(category.equals("IOT PROJECT")){
+				projectList = memberDAOService.projectTrackIOT(p);
+			}else if(category.equals("WINDOW PROJECT")){
+				projectList = memberDAOService.projectTrackWINDOW(p);
+			}else if(category.equals("ANDROID PROJECT")){
+				projectList = memberDAOService.projectTrackANDROID(p);
+			}else if(category.equals("ETC")){
+				projectList = memberDAOService.projectTrackETC(p);
+			}
+			
+			/////////////////////////
 			
 			project.addObject("projectTrack", projectList);
 			project.setViewName("projectTrack");
@@ -321,10 +399,8 @@ public class MybatisController {
 			mav.addObject("list",list);
 			mav.addObject("projectBoardList",projectBoardList);
 			
-			
-			
 			mav.setViewName("projectBoard");
-			return mav;                          
+			return mav;
 		}
 		
 		@RequestMapping(value = "assignList", method = RequestMethod.GET)  
@@ -398,8 +474,11 @@ public class MybatisController {
 		public ModelAndView projectBoardWrite(HttpServletRequest request, HttpServletResponse response) throws IOException {          
 		
 			ModelAndView mav = new ModelAndView();
+			
+			////////////////File Upload /////////////////////////
+			
 			int maxPostSize = 10 * 1024 * 1024; // 10MB
-		     String saveDirectory = request.getSession().getServletContext().getRealPath("/upload");
+		     String saveDirectory = request.getSession().getServletContext().getRealPath("/WEB-INF/upload");
 		     MultipartRequest multi = new MultipartRequest(request, saveDirectory, maxPostSize, "utf-8");
 		 
 		     Enumeration formNames=multi.getFileNames();  // 폼의 이름 반환
@@ -422,10 +501,104 @@ public class MybatisController {
 		               fileExtend = fileName.substring(fileName.lastIndexOf(".")+1); //파일 확장자
 		               fileSize = String.valueOf(fileObj.length());                    // 파일크기
 		               
-		               System.out.println(saveDirectory+"\\"+originFileName);
 		          }
 		     }
        
+		     //////////////////end of FileUpload//////////////////////////////
+		     
+		     HttpSession session = request.getSession();
+		     String USER_ID=(String)session.getAttribute("USER_ID");
+		     String PRO_ID=(String)multi.getParameter("pro_id");
+		     String PRO_SUBJECT=(String)multi.getParameter("subject");
+		     String PRO_CONTENT=(String)multi.getParameter("content");
+		     String PRO_FILE=(String)multi.getParameter("file");
+		     if(PRO_FILE==null){
+		    	 PRO_FILE="";
+		     }
+		   
+		     ProjectBoard pb = new ProjectBoard();
+		     pb.setUSER_ID(USER_ID);
+		     pb.setPRO_ID(PRO_ID);
+		     pb.setPRO_SUBJECT(PRO_SUBJECT);
+		     pb.setPRO_CONTENT(PRO_CONTENT);
+		     pb.setPRO_FILE(fileName);
+		     
+		     memberDAOService.projectBoardWrite(pb);
 		return mav;
+		}
+		
+		@RequestMapping(value = "projectBoardDetail", method = RequestMethod.GET)  
+		public ModelAndView projectBoardDetail(HttpServletRequest request, HttpServletResponse response) {          
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("projectBoardDetail");
+			int PRO_BOARD_ID=Integer.parseInt((String)request.getParameter("pro_board_id"));
+			ProjectBoard pb = memberDAOService.projectBoardDetail(PRO_BOARD_ID);
+			
+			mav.addObject("pb",pb);
+			
+			return mav;                          
+		}
+		@RequestMapping(value = "writeNoticeBoard", method = RequestMethod.POST)  
+		public String writeNoticeBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {          
+		
+			ModelAndView mav = new ModelAndView();
+			
+			////////////////File Upload /////////////////////////
+			
+			int maxPostSize = 10 * 1024 * 1024; // 10MB
+		     String saveDirectory = request.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+		     MultipartRequest multi = new MultipartRequest(request, saveDirectory, maxPostSize, "utf-8");
+		 
+		     Enumeration formNames=multi.getFileNames();  // 폼의 이름 반환
+		 
+		     String fileInput = "";
+		     String fileName = "";
+		     String type = "";
+		     File fileObj = null;
+		     String originFileName = "";    
+		     String fileExtend = "";
+		     String fileSize = "";
+		 
+		     while(formNames.hasMoreElements()) {
+		          fileInput = (String)formNames.nextElement();                // 파일인풋 이름
+		          fileName = multi.getFilesystemName(fileInput);            // 파일명
+		          if (fileName != null) {
+		               type = multi.getContentType(fileInput);                   //콘텐트타입    
+		               fileObj = multi.getFile(fileInput);                             //파일객체
+		               originFileName = multi.getOriginalFileName(fileInput);           //초기 파일명
+		               fileExtend = fileName.substring(fileName.lastIndexOf(".")+1); //파일 확장자
+		               fileSize = String.valueOf(fileObj.length());                    // 파일크기
+		               
+		          }
+		     }
+       
+		     //////////////////end of FileUpload//////////////////////////////
+		     
+		     HttpSession session = request.getSession();
+		     String USER_ID=(String)session.getAttribute("USER_ID");
+		     String PRO_SUBJECT=(String)multi.getParameter("subject");
+		     String PRO_CONTENT=(String)multi.getParameter("content");
+		     String PRO_FILE=(String)multi.getParameter("file");
+		     if(PRO_FILE==null){
+		    	 PRO_FILE="";
+		     }
+		   
+		     ProjectBoard pb = new ProjectBoard();
+		     pb.setUSER_ID(USER_ID);
+		     pb.setPRO_SUBJECT(PRO_SUBJECT);
+		     pb.setPRO_CONTENT(PRO_CONTENT);
+		     pb.setPRO_FILE(fileName);
+		     mav.setViewName("");
+		     memberDAOService.writeNoticeBoard(pb);
+		     return "forward:/notice.do";
+		}
+		
+		@RequestMapping(value = "notice", method = RequestMethod.GET)  
+		public ModelAndView notice(Locale locale, Model model) {   
+			ModelAndView mav = new ModelAndView();
+			List<NoticeBoard> nb = memberDAOService.notice();
+			mav.addObject("notice",nb);
+			mav.setViewName("notice");
+		    return mav;
 		}
 }

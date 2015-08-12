@@ -97,8 +97,7 @@
 					<div id="btnset">
 					
 					<a href="login.do"><font id="log">Login</font></a> | 
-					<a href="join.do"><font id="log">Join</font></a> | 
-					<a href="admin.do"><font id="log">Admin</font></a>
+					<a href="join.do"><font id="log">Join</font></a>
 					</div>
 				</c:if>
 				<c:if test="${sessionScope.USER_ID!=NULL }">
@@ -106,7 +105,9 @@
 					
 					<a id="logout" href="logout.do"><font id="log">Logout</font></a> | 
 					<a href="mypage.do"><font id="log">MyPage</font></a> | 
+					<c:if test="${sessionScope.USER_ID=='admin' }">
 					<a href="admin.do"><font id="log">Admin</font></a>
+					</c:if>
 					</div>
 				
 				</c:if>

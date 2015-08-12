@@ -90,7 +90,7 @@
 			        			<c:forEach var="projectBoardList" items="${projectBoardList }">
 			        			<tr>
 			        				
-			        				<td><a href="projectBoardDetail.do">${projectBoardList.PRO_SUBJECT }</a></td>
+			        				<td><a href="projectBoardDetail.do?pro_board_id=${projectBoardList.PRO_BOARD_ID }">${projectBoardList.PRO_SUBJECT }</a></td>
 			        				<td>${projectBoardList.USER_ID}</td>
 			        				<td>${projectBoardList.PRO_DATE}</td>
 			        			</tr>

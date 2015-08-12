@@ -5,7 +5,9 @@
 <html>
 <head>
 <title>프로젝트 트랙</title>
+
 </head>
+
 <body>
 
  <jsp:include page="../include/header.jsp"/>
@@ -19,8 +21,18 @@
 				<li>/ project track</li>
 			</ul>
 		</div>
-		
+		<div id=contactForm>
 		<!-- portfolio list -->
+		<select style="width:150px" id="category">
+			<option value="select">CATEGORIES</option>
+			<option value="WEB PROJECT">WEB PROJECT</option>
+			<option value="IOT PROJECT">IOT PROJECT</option>
+			<option value="WINDOW PROJECT">WINDOW PROJECT</option>
+			<option value="ANDROID PROJECT">ANDROID PROJECT</option>
+			<option value="ETC">ETC</option>				
+									   
+		</select>
+		</div>
 		<c:if test="${sessionScope.USER_ID!=NULL }">
 					
 				
@@ -109,6 +121,19 @@
 
 	<!-- end of footer -->
 
+<input type="hidden" value="${sessionScope.category }" id="categories"/>
+
 </div>
+<script type="text/javascript">
+
+	$( document ).ready(function() {
+		$("#category").val($('#categories').val());
+		
+	});
+
+		$('#category').change(function(){
+			window.location="projectTrack.do?category="+$("#category option:selected").val();
+		});
+	</script>
 </body>
 </html>

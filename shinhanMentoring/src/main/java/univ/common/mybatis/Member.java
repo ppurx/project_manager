@@ -8,6 +8,7 @@ public class Member {
 	private String USER_EMAIL;
 	private String USER_EMAIL_DOMAIN;
 	private String USER_JOB;
+	
 	private String PRO_ID;
 	public String getPRO_ID() {
 		return PRO_ID;

@@ -4,6 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<script src="//code.jquery.com/jquery.min.js"></script>
 <title>프로젝트 트랙</title>
 </head>
 <body>
@@ -32,30 +33,26 @@
 				
 					<tr>
 						<td width="80px">주제</td><td colspan="3">						
-						<input type="text" readonly value="${projectDetail.PRO_CATEGORY }" />
+						<input type="text" readonly value="${pb.PRO_SUBJECT }" />
 						</td>
 					</tr>
+					<c:if test="${pb.PRO_FILE!='' }">
+						<tr>
+							<td>첨부파일</td><td><a href="#"id="download"><input type="text" value="${pb.PRO_FILE }" readonly id="file"/></a></td>
+						</tr>	
+					</c:if>
 					<tr>
-						<td>기대효과</td><td><input type="text" value="${projectDetail.PRO_EFFECT }" readonly name="effect"  id="effect" /></td>
+						<td>작성일</td><td colspan="2"><input type="text" value="${pb.PRO_DATE }" readonly/></td>
 					</tr>	
+					
 					<tr>
-						<td><a href="C:\Users\sh\Desktop\springWorkspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\shinhanMentoring\upload\test.txt">다운로드</a></td>
-					</tr>
-					<tr>
-						<td>시작일</td><td colspan="2"><input type="text" value="${projectDetail.PRO_START_DATE }" readonly id="startDate" name="startDate"/></td>
-					</tr>	
-					<tr>
-						<td>종료일</td><td colspan="5"><input type="text" value="${projectDetail.PRO_END_DATE }" readonly  id="endDate" name="endDate"/></td>
-					</tr>	
-					<tr>
-						<td>개요</td><td  colspan="3"><textarea readonly name="contents" id="contents">${projectDetail.PRO_CONTENT }</textarea>
+						<td>내용</td><td  colspan="3"><textarea readonly name="contents" id="contents">${pb.PRO_CONTENT }</textarea>
 						
 						</td>
 					</tr>							
 								
 				</table>	
 				<div style="float:right; margin-right:50px"><p><c:if test="${sessionScope.USER_ID!=NULL }"><input id="submitbtn" type="button" value="프로젝트 가입 신청"/> </c:if><input type="button" onclick="window.location='projectTrack.do'" value="취소"/></p></div>
-			<input type="hidden" name="selected_category" id="selected_category" value="0"/>
 			<input type="hidden" id="PRO_ID" name="PRO_ID" value="${projectDetail.PRO_ID }"/>
 			</div>
 			</form>
@@ -79,5 +76,14 @@
 	<!-- end of footer -->
 
 </div>
+<script type="text/javascript">
+	$( document ).ready(function() {
+		$('#download').click(function(){
+			window.location="download.do?PRO_FILE="+$('#file').val();
+		});
+});
+
+</script>
+
 </body>
 </html>

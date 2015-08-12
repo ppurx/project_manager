@@ -19,10 +19,10 @@
 	<input type="hidden" name="test" value="asdf"/>
 		<!-- masthead -->
         <div id="masthead">
-			<span class="head">글 작성</span>
+			<span class="head">공지사항 작성</span>
 			<ul class="breadcrumbs">
 				<li><a href="index.jsp">home</a></li>
-				<li>/ mypage / 프로젝트 게시판</li>
+				<li>/ notice</li>
 			</ul>
 		</div>
 		
@@ -31,7 +31,7 @@
 		<!-- join table -->
 		<div style="margin-left:50px; margin-top:50px">
 			
-			<form name="projectBoardWrite" action="projectBoardWrite.do" method="post" enctype="multipart/form-data">
+			<form name="writeNoticeBoard" action="writeNoticeBoard.do" method="post" enctype="multipart/form-data">
 		
 				<div id="contactForm">
 				<table>
@@ -51,7 +51,7 @@
 					</tr>					
 				</table>	
 				<div style="float:right; margin-right:50px"><p><input id="submitbtn" type="submit" value="글작성"/> <input type="button" onclick="window.location='projectBoardWrite.do?PRO_ID=${PRO_ID}'" value="취소"/></p></div>
-			<input type="hidden" id="pro_id" name="pro_id" value="${PRO_ID }"/>
+			
 			</div>
 		</form>
 		</div>

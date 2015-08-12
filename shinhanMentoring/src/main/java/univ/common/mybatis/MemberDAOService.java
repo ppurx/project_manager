@@ -188,4 +188,147 @@ public class MemberDAOService implements MemberDAO {
 		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 		memberMapper.updateInfo(member);
 	}
+
+
+	@Override
+	public void projectBoardWrite(ProjectBoard pb) {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		memberMapper.projectBoardWrite(pb);
+		
+	}
+
+
+	@Override
+	public ProjectBoard projectBoardDetail(int PRO_BOARD_ID) {
+		// TODO Auto-generated method stub
+		
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		ProjectBoard pb =memberMapper.projectBoardDetail(PRO_BOARD_ID);
+		
+		return pb;
+	}
+
+
+	@Override
+	public ArrayList<Project> projectTrackWEB(Project project) {
+		// TODO Auto-generated method stub
+		ArrayList<Project> result = new ArrayList<Project>();
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		//getMember()�� �޼ҵ��� mapper.mxl�� id�� �����ؾ��Ѵ�.
+		result = memberMapper.projectTrackWEB(project);
+		
+		return result;
+	}
+
+
+	@Override
+	public ArrayList<Project> projectTrackIOT(Project project) {
+		// TODO Auto-generated method stub
+		ArrayList<Project> result = new ArrayList<Project>();
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		//getMember()�� �޼ҵ��� mapper.mxl�� id�� �����ؾ��Ѵ�.
+		result = memberMapper.projectTrackIOT(project);
+		
+		return result;
+	}
+
+
+	@Override
+	public ArrayList<Project> projectTrackWINDOW(Project project) {
+		// TODO Auto-generated method stub
+		ArrayList<Project> result = new ArrayList<Project>();
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		//getMember()�� �޼ҵ��� mapper.mxl�� id�� �����ؾ��Ѵ�.
+		result = memberMapper.projectTrackWINDOW(project);
+		
+		return result;
+	}
+
+
+	@Override
+	public ArrayList<Project> projectTrackANDROID(Project project) {
+		// TODO Auto-generated method stub
+		ArrayList<Project> result = new ArrayList<Project>();
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		//getMember()�� �޼ҵ��� mapper.mxl�� id�� �����ؾ��Ѵ�.
+		result = memberMapper.projectTrackANDROID(project);
+		
+		return result;
+	}
+
+
+	@Override
+	public ArrayList<Project> projectTrackETC(Project project) {
+		// TODO Auto-generated method stub
+		ArrayList<Project> result = new ArrayList<Project>();
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		//getMember()�� �޼ҵ��� mapper.mxl�� id�� �����ؾ��Ѵ�.
+		result = memberMapper.projectTrackETC(project);
+		
+		return result;
+	}
+
+
+	@Override
+	public int projectCountWEB() {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		int totalCount = memberMapper.projectCountWEB();
+		return totalCount;
+	}
+
+
+	@Override
+	public int projectCountIOT() {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		int totalCount = memberMapper.projectCountIOT();
+		return totalCount;
+	}
+
+
+	@Override
+	public int projectCountANDROID() {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		int totalCount = memberMapper.projectCountANDROID();
+		return totalCount;
+	}
+
+
+	@Override
+	public int projectCountWINDOW() {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		int totalCount = memberMapper.projectCountWINDOW();
+		return totalCount;
+	}
+
+
+	@Override
+	public int projectCountETC() {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		int totalCount = memberMapper.projectCountETC();
+		return totalCount;
+	}
+
+
+	@Override
+	public void writeNoticeBoard(ProjectBoard pb) {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		memberMapper.writeNoticeBoard(pb);
+	}
+
+
+	@Override
+	public ArrayList<NoticeBoard> notice() {
+		// TODO Auto-generated method stub
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		ArrayList<NoticeBoard> pb=memberMapper.notice();
+		 
+		return pb;
+	}
 }

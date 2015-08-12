@@ -36,10 +36,38 @@
 		<result property="PRO_FILE" column="PRO_FILE" />
 	</resultMap>
 	
+	<resultMap type="noticeBoard" id="noticeBoardResultMap">
+		<result property="NOT_BOARD_ID" column="PRO_BOARD_ID"/>
+		<result property="USER_ID" column="USER_ID" />
+		<result property="NOT_SUBJECT" column="NOT_SUBJECT" />
+		<result property="NOT_CONTENT" column="NOT_CONTENT" />
+		<result property="NOT_DATE" column="NOT_DATE" />
+		<result property="NOT_FILE" column="NOT_FILE" />
+	</resultMap>
+	
 	
 	<select id="projectCount" resultType="java.lang.Integer" >
 	select count(*) from PROJECT
 	</select>
+	
+	<select id="projectCountWEB" resultType="java.lang.Integer" >
+	select count(*) from PROJECT where PRO_CATEGORY="WEB PROJECT"
+	</select>
+	<select id="projectCountIOT" resultType="java.lang.Integer" >
+	select count(*) from PROJECT where PRO_CATEGORY="IOT PROJECT"
+	</select>
+	<select id="projectCountANDROID" resultType="java.lang.Integer" >
+	select count(*) from PROJECT where PRO_CATEGORY="ANDROID PROJECT"
+	</select>
+	<select id="projectCountWINDOW" resultType="java.lang.Integer" >
+	select count(*) from PROJECT where PRO_CATEGORY="WINDOW PROJECT"
+	</select>
+	<select id="projectCountETC" resultType="java.lang.Integer" >
+	select count(*) from PROJECT where PRO_CATEGORY="ETC"
+	</select>
+	
+	
+	
 	<!-- id의 경우에는 Mapper.java에 동일하게 사용해야된다. -->
 	<select id="getMembers" resultMap="MemberResultMap">
 		SELECT * FROM USER
@@ -62,6 +90,72 @@
 			FROM
 			    PROJECT,
 			    (SELECT @ROWNUM := 0) R
+			    order by PRO_ID desc	 
+			    )a
+		where a.ROWNUM between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="projectTrackWEB" resultMap="ProjectResultMap"  parameterType="univ.common.mybatis.Project">
+		select a.* from (
+			SELECT
+			    @ROWNUM := @ROWNUM + 1 AS ROWNUM,
+			    PROJECT.* 
+			FROM
+			    PROJECT,
+			    (SELECT @ROWNUM := 0) R
+			     where PRO_CATEGORY="WEB PROJECT"
+			    order by PRO_ID desc	 
+			    )a
+		where a.ROWNUM between #{startNum} and #{endNum}
+	</select>
+	<select id="projectTrackIOT" resultMap="ProjectResultMap"  parameterType="univ.common.mybatis.Project">
+		select a.* from (
+			SELECT
+			    @ROWNUM := @ROWNUM + 1 AS ROWNUM,
+			    PROJECT.* 
+			FROM
+			    PROJECT,
+			    (SELECT @ROWNUM := 0) R
+			    where PRO_CATEGORY="IOT PROJECT"
+			    order by PRO_ID desc	 
+			    )a
+		where a.ROWNUM between #{startNum} and #{endNum}
+	</select>
+	<select id="projectTrackWINDOW" resultMap="ProjectResultMap"  parameterType="univ.common.mybatis.Project">
+		select a.* from (
+			SELECT
+			    @ROWNUM := @ROWNUM + 1 AS ROWNUM,
+			    PROJECT.* 
+			FROM
+			    PROJECT,
+			    (SELECT @ROWNUM := 0) R
+				where PRO_CATEGORY="WINDOW PROJECT"
+			    order by PRO_ID desc	 
+			    )a
+		where a.ROWNUM between #{startNum} and #{endNum}
+	</select>
+	<select id="projectTrackANDROID" resultMap="ProjectResultMap"  parameterType="univ.common.mybatis.Project">
+		select a.* from (
+			SELECT
+			    @ROWNUM := @ROWNUM + 1 AS ROWNUM,
+			    PROJECT.* 
+			FROM
+			    PROJECT,
+			    (SELECT @ROWNUM := 0) R
+				where PRO_CATEGORY="ANDROID PROJECT"
+			    order by PRO_ID desc	 
+			    )a
+		where a.ROWNUM between #{startNum} and #{endNum}
+	</select>
+	<select id="projectTrackETC" resultMap="ProjectResultMap"  parameterType="univ.common.mybatis.Project">
+		select a.* from (
+			SELECT
+			    @ROWNUM := @ROWNUM + 1 AS ROWNUM,
+			    PROJECT.* 
+			FROM
+			    PROJECT,
+			    (SELECT @ROWNUM := 0) R
+				where PRO_CATEGORY="ETC"
 			    order by PRO_ID desc	 
 			    )a
 		where a.ROWNUM between #{startNum} and #{endNum}
@@ -108,7 +202,7 @@
 	
 	<!-- project board List -->
 	<select id="projectBoardList" resultMap="projectBoardResultMap"  parameterType="java.lang.Integer">
-		select * from project_board where pro_id=#{id}
+		select * from project_board where pro_id=#{id} order by PRO_BOARD_ID desc
 	</select>
 
 	<select id="userAssignList" resultMap="MemberResultMap" parameterType="java.lang.Integer">
@@ -135,4 +229,20 @@
 	<update id="updateInfo" parameterType="univ.common.mybatis.Member">	    
 	    update USER set USER_NAME=#{USER_NAME}, USER_PHONE=#{USER_PHONE}, USER_EMAIL=#{USER_EMAIL},USER_EMAIL_DOMAIN=#{USER_EMAIL_DOMAIN},USER_PASSWORD=#{USER_PASSWORD} where USER_ID=#{USER_ID}
 	</update>
+	
+	<insert id="projectBoardWrite" parameterType="univ.common.mybatis.ProjectBoard">
+	    insert into project_board(PRO_ID,USER_ID,PRO_SUBJECT,PRO_CONTENT,PRO_FILE) values(#{PRO_ID},#{USER_ID},#{PRO_SUBJECT},#{PRO_CONTENT},#{PRO_FILE})	    
+	</insert>
+	
+	<select id="projectBoardDetail" resultMap="projectBoardResultMap" parameterType="java.lang.Integer">
+	    select * from project_board where pro_board_id=#{id}
+	</select>
+	
+	<insert id="writeNoticeBoard" parameterType="univ.common.mybatis.ProjectBoard">
+	    insert into notice_board(USER_ID,NOT_SUBJECT,NOT_CONTENT,NOT_FILE) values(#{USER_ID},#{PRO_SUBJECT},#{PRO_CONTENT},#{PRO_FILE})	    
+	</insert>
+	
+	<select id="notice" resultMap="noticeBoardResultMap">
+	    select * from NOTICE_BOARD
+	</select>
 </mapper>
